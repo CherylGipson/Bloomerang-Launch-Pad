@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PMM Launch Pad — Bloomerang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root, [data-theme="light"] {
+      --color-bg: #f7f6f2;
+      --color-surface: #f9f8f5;
+      --color-surface-2: #fbfbf9;
+      --color-surface-offset: #f3f0ec;
+      --color-divider: #dcd9d5;
+      --color-border: #d4d1ca;
+      --color-text: #28251d;
+      --color-text-muted: #6f6d67;
+      --color-text-faint: #9e9b93;
+      --color-text-inverse: #f9f8f4;
+      --color-primary: #01696f;
+      --color-primary-hover: #0c4e54;
+      --color-primary-soft: #dbe8e6;
+      --color-success: #2f6f3e;
+      --shadow-sm: 0 1px 2px rgba(40,37,29,.06);
+      --shadow-md: 0 10px 30px rgba(40,37,29,.08);
+      --radius-sm: .5rem;
+      --radius-md: .875rem;
+      --radius-lg: 1.25rem;
+      --space-2: .5rem;
+      --space-3: .75rem;
+      --space-4: 1rem;
+      --space-5: 1.25rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --space-10: 2.5rem;
+      --space-12: 3rem;
+      --text-xs: .78rem;
+      --text-sm: .95rem;
+      --text-base: 1rem;
+      --text-lg: 1.15rem;
+      --text-2xl: clamp(2.3rem, 1.2rem + 4vw, 4.8rem);
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Work Sans', system-ui, sans-serif;
+    }
+    [data-theme="dark"] {
+      --color-bg: #171614;
+      --color-surface: #1c1b19;
+      --color-surface-2: #201f1d;
+      --color-surface-offset: #242320;
+      --color-divider: #2c2a28;
+      --color-border: #3a3835;
+      --color-text: #e4e0d8;
+      --color-text-muted: #a09b92;
+      --color-text-faint: #7c776f;
+      --color-text-inverse: #171614;
+      --color-primary: #4f98a3;
+      --color-primary-hover: #66aebb;
+      --color-primary-soft: #223336;
+      --color-success: #68a678;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,.22);
+      --shadow-md: 0 10px 30px rgba(0,0,0,.32);
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;font-family:var(--font-body);font-size:var(--text-base);line-height:1.6;background:var(--color-bg);color:var(--color-text)}
+    button,input,textarea,select{font:inherit} img,svg{display:block;max-width:100%}
+    .page{max-width:1180px;margin:0 auto;padding:var(--space-6)}
+
+    /* TOPBAR */
+    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-8)}
+    .brand{font-size:var(--text-sm);letter-spacing:.18em;text-transform:uppercase;color:var(--color-primary);font-weight:700}
+    .top-actions{display:flex;gap:var(--space-3);align-items:center}
+    .theme-toggle,.clear-top{border:1px solid var(--color-border);background:var(--color-surface);color:var(--color-text);border-radius:999px;padding:.55rem 1rem;cursor:pointer;transition:.18s ease;font-size:var(--text-sm)}
+    .theme-toggle:hover,.clear-top:hover{background:var(--color-surface-2)}
+
+    /* HERO */
+    .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:var(--space-10);align-items:start;padding:var(--space-6) 0 var(--space-8)}
+    .eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:var(--space-6);color:var(--color-primary);font-weight:600;letter-spacing:.12em;text-transform:uppercase;font-size:var(--text-xs)}
+    .eyebrow:before{content:'';width:38px;height:1px;background:var(--color-primary)}
+    h1{font-family:var(--font-display);font-weight:400;line-height:.96;font-size:var(--text-2xl);margin:0 0 var(--space-5)}
+    .accent{color:#4e8f97;font-style:italic}
+    .lede{font-size:clamp(1.08rem,.95rem + .5vw,1.35rem);color:var(--color-text-muted);max-width:40ch;line-height:1.6}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-6);margin-top:var(--space-10)}
+    .stat strong{display:block;font-family:var(--font-display);font-weight:400;font-size:3.2rem;line-height:.9;color:#4e8f97;margin-bottom:.45rem}
+    .stat span{display:block;color:var(--color-text-muted);font-size:var(--text-sm);max-width:16ch;line-height:1.5}
+
+    /* FORM PANEL */
+    .panel{background:linear-gradient(180deg,var(--color-surface),var(--color-surface-2));border:1px solid var(--color-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);overflow:hidden}
+    .panel-head{padding:var(--space-6) var(--space-6) var(--space-4);border-bottom:1px solid var(--color-divider)}
+    .panel-title{font-size:1.15rem;font-weight:700;margin:0 0 .35rem}
+    .panel-copy{font-size:var(--text-sm);color:var(--color-text-muted);margin:0}
+    .form-wrap{padding:var(--space-6)}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4)}
+    .field{margin-bottom:var(--space-5)}
+    label{display:block;font-size:var(--text-sm);font-weight:600;margin-bottom:.55rem}
+    .req{color:var(--color-primary)}
+    input,select,textarea{width:100%;background:var(--color-surface);color:var(--color-text);border:1px solid var(--color-border);border-radius:14px;padding:1rem 1rem;outline:none;transition:.18s ease}
+    textarea{min-height:120px;resize:vertical}
+    input:focus,select:focus,textarea:focus{border-color:var(--color-primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--color-primary) 16%,transparent)}
+
+    /* SECTION SELECTOR */
+    .section-selector{border:1px solid var(--color-border);background:var(--color-surface);border-radius:18px;padding:var(--space-4)}
+    .section-selector-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.85rem}
+    .section-selector-head h3{margin:0;font-size:1rem}
+    .select-all-link{font-size:var(--text-xs);color:var(--color-primary);cursor:pointer;background:none;border:none;padding:0;font-weight:600}
+    .section-checks{display:grid;gap:8px}
+    .section-check-row{display:flex;align-items:flex-start;gap:.75rem;border:1px solid var(--color-divider);border-radius:14px;padding:.85rem 1rem;background:var(--color-surface-2);cursor:pointer;transition:.15s ease}
+    .section-check-row:hover{border-color:var(--color-primary)}
+    .section-check-row input[type=checkbox]{width:16px;height:16px;margin-top:3px;flex-shrink:0;accent-color:var(--color-primary);cursor:pointer}
+    .section-check-label{cursor:pointer;flex:1}
+    .section-check-label strong{display:block;margin-bottom:.1rem;font-size:var(--text-sm)}
+    .section-check-label span{font-size:var(--text-xs);color:var(--color-text-muted)}
+
+    .cta-row{display:flex;gap:var(--space-3);align-items:center;margin-top:var(--space-6)}
+    .btn{border:none;border-radius:999px;padding:.95rem 1.2rem;font-weight:700;cursor:pointer;transition:.18s ease;font-size:var(--text-sm)}
+    .btn-primary{background:var(--color-primary);color:var(--color-text-inverse);flex:1}
+    .btn-primary:hover:not(:disabled){background:var(--color-primary-hover)}
+    .btn-primary:disabled{opacity:.5;cursor:not-allowed}
+    .btn-primary.done{background:var(--color-success)}
+    .btn-secondary{background:var(--color-surface);color:var(--color-text);border:1px solid var(--color-border)}
+
+    /* PROGRESS */
+    .progress-wrap{height:3px;background:var(--color-divider);border-radius:2px;margin-top:var(--space-3);overflow:hidden;display:none}
+    .progress-wrap.visible{display:block}
+    .progress-fill{height:100%;background:var(--color-primary);border-radius:2px;width:0%;transition:width .6s ease}
+    .status{font-size:var(--text-sm);color:var(--color-text-muted);min-height:1.4em;margin-top:var(--space-3)}
+    .status.error{color:#c0392b}
+
+    /* SPINNER */
+    .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;display:inline-block;animation:spin .7s linear infinite;vertical-align:-3px;margin-right:8px}
+    .spinner-muted{width:14px;height:14px;border:2px solid rgba(0,0,0,.15);border-top-color:var(--color-primary);border-radius:50%;display:inline-block;animation:spin .7s linear infinite;vertical-align:-2px;margin-right:6px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* SECTION ACCENT COLORS */
+    :root{--accent-1:#01696f;--accent-2:#6b5ea8;--accent-3:#b86e2a;--accent-4:#2a6fc1;--accent-5:#2f7a4a}
+    .card-s1{border-top:3px solid var(--accent-1)}
+    .card-s2{border-top:3px solid var(--accent-2)}
+    .card-s3{border-top:3px solid var(--accent-3)}
+    .card-s4{border-top:3px solid var(--accent-4)}
+    .card-s5{border-top:3px solid var(--accent-5)}
+    .card-s1 .card-h h3{color:var(--accent-1)}
+    .card-s2 .card-h h3{color:var(--accent-2)}
+    .card-s3 .card-h h3{color:var(--accent-3)}
+    .card-s4 .card-h h3{color:var(--accent-4)}
+    .card-s5 .card-h h3{color:var(--accent-5)}
+    .card-s1 .card-tag{color:var(--accent-1);opacity:.7}
+    .card-s2 .card-tag{color:var(--accent-2);opacity:.7}
+    .card-s3 .card-tag{color:var(--accent-3);opacity:.7}
+    .card-s4 .card-tag{color:var(--accent-4);opacity:.7}
+    .card-s5 .card-tag{color:var(--accent-5);opacity:.7}
+
+    /* RESULTS */
+    .results{display:none;margin-top:var(--space-8)}
+    .results.show{display:block}
+    .results-head{display:flex;justify-content:space-between;align-items:center;gap:var(--space-4);margin-bottom:var(--space-4);flex-wrap:wrap}
+    .results-title{margin:0;font-size:1.2rem}
+    .results-actions{display:flex;gap:var(--space-2)}
+    .cards{display:grid;gap:var(--space-6)}
+    .card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:20px;overflow:hidden}
+    .card-h{display:flex;justify-content:space-between;align-items:center;gap:var(--space-4);padding:1.1rem 1.5rem;border-bottom:1px solid var(--color-divider)}
+    .card-h h3{margin:0;font-size:var(--text-sm);font-weight:700}
+    .card-tag{font-size:var(--text-xs);color:var(--color-text-faint);font-weight:500}
+    .copy-btn{border:1px solid var(--color-border);background:var(--color-surface-2);padding:.45rem .9rem;border-radius:999px;cursor:pointer;font-size:var(--text-xs);font-weight:600;color:var(--color-text-muted);transition:.15s ease;white-space:nowrap}
+    .copy-btn:hover:not(:disabled){border-color:var(--color-primary);color:var(--color-primary)}
+    .copy-btn:disabled{opacity:.4;cursor:default}
+    .copy-btn.copied{border-color:var(--color-success);color:var(--color-success)}
+    .card-body{padding:1.5rem;font-size:var(--text-sm);line-height:1.8;color:var(--color-text-muted)}
+    .card-body h2{font-size:1rem;font-weight:700;color:var(--color-text);margin:1.75rem 0 .5rem;padding-bottom:.35rem;border-bottom:1px solid var(--color-divider)}
+    .card-body h2:first-child{margin-top:0}
+    .card-body h3{font-size:var(--text-sm);font-weight:700;color:var(--color-text);margin:1.25rem 0 .4rem;letter-spacing:0;text-transform:none}
+    .card-body h4{font-size:var(--text-sm);font-weight:600;color:var(--color-text);margin:.85rem 0 .25rem}
+    .card-body p{margin:.4rem 0}
+    .card-body ul,.card-body ol{padding-left:1.5rem;margin:.5rem 0}
+    .card-body li{margin-bottom:.35rem}
+    .card-body strong{color:var(--color-text);font-weight:600}
+    .card-body hr{border:none;border-top:1px solid var(--color-divider);margin:1.25rem 0}
+
+    /* FOOTER */
+    .foot{padding:var(--space-8) 0 var(--space-4);color:var(--color-text-faint);font-size:var(--text-xs)}
+
+    /* RESPONSIVE */
+    @media(max-width:980px){.hero{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    @media(max-width:720px){.page{padding:var(--space-4)}.grid,.stats{grid-template-columns:1fr}.cta-row,.results-head,.results-actions,.topbar{flex-direction:column;align-items:stretch}}
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="brand">PMM Launch Pad · Bloomerang</div>
+      <div class="top-actions">
+        <button class="clear-top" id="clearTop">Clear &amp; Start Over</button>
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">◐</button>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div>
+        <div class="eyebrow">PMM Productivity Workflow</div>
+        <h1>From brief to messaging pack — <span class="accent">in one run.</span></h1>
+        <p class="lede">Paste a feature brief, pick your persona and launch stage, select the sections you need, and hit Generate.</p>
+        <div class="stats">
+          <div class="stat"><strong>91%</strong><span>of PMMs own positioning &amp; messaging</span></div>
+          <div class="stat"><strong>44%</strong><span>of PMM teams are 1–2 people</span></div>
+          <div class="stat"><strong>5×</strong><span>structured outputs from a single brief</span></div>
+        </div>
+      </div>
+
+      <!-- FORM PANEL -->
+      <div class="panel">
+        <div class="panel-head">
+          <h2 class="panel-title">Launch Message Pack</h2>
+          <p class="panel-copy">One brief. One persona. Choose your outputs.</p>
+        </div>
+        <div class="form-wrap">
+          <form id="launchForm" onsubmit="return false">
+            <div class="field">
+              <label for="featureName">Feature or launch name <span class="req">*</span></label>
+              <input id="featureName" placeholder="e.g., Penny — AI Fundraising Strategist" required />
+            </div>
+
+            <div class="field">
+              <label for="brief">Feature brief <span class="req">*</span></label>
+              <textarea id="brief" rows="7" placeholder="Paste your product brief here. Include: what it is, who it's for, how it works, key capabilities, differentiators, proof points, and any known constraints." required></textarea>
+            </div>
+
+            <div class="grid">
+              <div class="field">
+                <label for="launchStage">Launch stage <span class="req">*</span></label>
+                <select id="launchStage" required>
+                  <option value="">— Select —</option>
+                  <option>Early access – limited beta / pilot cohort</option>
+                  <option>GA – general availability / broad release</option>
+                  <option>Post-launch optimization – feature is live; refining messaging based on real usage</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="persona">Persona <span class="req">*</span></label>
+                <select id="persona" required>
+                  <option value="">— Select —</option>
+                  <option>Director of Development at a mid-size nonprofit</option>
+                  <option>Executive Director at a small to mid-size nonprofit</option>
+                  <option>Fundraising Manager or Coordinator on a lean team</option>
+                  <option>Major Gifts Officer focused on high-value donors</option>
+                  <option>Board member or Development Committee chair</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="notes">Constraints or notes</label>
+              <textarea id="notes" rows="2" placeholder="Anything to avoid, include, or calibrate — tone, claims, assumptions."></textarea>
+            </div>
+
+            <!-- SECTION SELECTOR -->
+            <div class="section-selector">
+              <div class="section-selector-head">
+                <h3>Select sections to generate</h3>
+                <button type="button" class="select-all-link" id="selectAllBtn" onclick="toggleSelectAll()">Deselect all</button>
+              </div>
+              <div class="section-checks">
+                <label class="section-check-row">
+                  <input type="checkbox" class="section-check" value="1" checked>
+                  <div class="section-check-label"><strong>Messaging Foundation</strong><span>Positioning, value prop, key messages, differentiators, guardrails</span></div>
+                </label>
+                <label class="section-check-row">
+                  <input type="checkbox" class="section-check" value="2" checked>
+                  <div class="section-check-label"><strong>Persona Talk Track</strong><span>Pains, benefits, elevator pitch, discovery questions</span></div>
+                </label>
+                <label class="section-check-row">
+                  <input type="checkbox" class="section-check" value="3" checked>
+                  <div class="section-check-label"><strong>Sales Talk Track</strong><span>Conversational flow, guided walkthrough, close language</span></div>
+                </label>
+                <label class="section-check-row">
+                  <input type="checkbox" class="section-check" value="4" checked>
+                  <div class="section-check-label"><strong>FAQ &amp; Objection Handling</strong><span>Top objections with on-message responses</span></div>
+                </label>
+                <label class="section-check-row">
+                  <input type="checkbox" class="section-check" value="5" checked>
+                  <div class="section-check-label"><strong>Launch-Readiness Gaps</strong><span>Missing inputs, risks, and recommended PMM next steps</span></div>
+                </label>
+              </div>
+            </div>
+
+            <div class="cta-row">
+              <button type="button" class="btn btn-primary" id="generateBtn" onclick="generate()">Generate Message Pack</button>
+              <button type="button" class="btn btn-secondary" id="clearBtn">Clear</button>
+            </div>
+            <div class="progress-wrap" id="progressWrap">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="status" id="status"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section class="results" id="results">
+      <div class="results-head">
+        <h2 class="results-title">Generated message pack</h2>
+        <div class="results-actions">
+          <button class="copy-btn" id="copyAllBtn" onclick="copyAll()">Copy all outputs</button>
+          <button class="copy-btn" onclick="downloadMd()">↓ Download .md</button>
+        </div>
+      </div>
+      <div class="cards" id="cards"></div>
+    </section>
+
+    <div class="foot">Built by Cheryl Gipson · Sr. PMM Exercise · Bloomerang · May 2026</div>
+  </div>
+
+<script>
+let fullOutput = '';
+let lastFeatureName = '';
+let sectionResults = {};
+let allSelected = true;
+
+const SECTION_DEFS = [
+  { title: '1. Messaging Foundation', tag: 'Positioning · Value Prop · Guardrails' },
+  { title: '2. Persona Talk Track',   tag: 'Pains · Pitch · Questions' },
+  { title: '3. Sales Talk Track',     tag: 'Discovery · Walkthrough · Close' },
+  { title: '4. FAQ & Objection Handling', tag: 'Questions · Objections · Responses' },
+  { title: '5. Launch-Readiness Gaps', tag: 'Missing inputs · Risks · Next steps' }
+];
+
+// ── THEME ──
+function toggleTheme() {
+  const html = document.documentElement;
+  html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+}
+
+// ── SELECT ALL TOGGLE ──
+function toggleSelectAll() {
+  allSelected = !allSelected;
+  document.querySelectorAll('.section-check').forEach(cb => cb.checked = allSelected);
+  document.getElementById('selectAllBtn').textContent = allSelected ? 'Deselect all' : 'Select all';
+}
+
+// Keep select-all state in sync when user manually checks/unchecks
+document.querySelectorAll('.section-check').forEach(cb => {
+  cb.addEventListener('change', () => {
+    const all = document.querySelectorAll('.section-check');
+    const checked = document.querySelectorAll('.section-check:checked');
+    allSelected = all.length === checked.length;
+    document.getElementById('selectAllBtn').textContent = allSelected ? 'Deselect all' : 'Select all';
+  });
+});
+
+// ── CLEAR ──
+function clearAll() {
+  document.getElementById('launchForm').reset();
+  document.querySelectorAll('.section-check').forEach(cb => cb.checked = true);
+  allSelected = true;
+  document.getElementById('selectAllBtn').textContent = 'Deselect all';
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('cards').innerHTML = '';
+  setStatus('');
+  document.getElementById('progressWrap').classList.remove('visible');
+  document.getElementById('progressFill').style.width = '0%';
+  const btn = document.getElementById('generateBtn');
+  btn.disabled = false;
+  btn.classList.remove('done');
+  btn.textContent = 'Generate Message Pack';
+  fullOutput = '';
+  lastFeatureName = '';
+  sectionResults = {};
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+document.getElementById('clearBtn').addEventListener('click', clearAll);
+document.getElementById('clearTop').addEventListener('click', clearAll);
+
+// ── GENERATE ──
+async function generate() {
+  const featureName = document.getElementById('featureName').value.trim();
+  const brief = document.getElementById('brief').value.trim();
+  const launchStage = document.getElementById('launchStage').value;
+  const persona = document.getElementById('persona').value;
+  const notes = document.getElementById('notes').value.trim();
+
+  if (!featureName || !brief || !launchStage || !persona) {
+    setStatus('Please fill in all required fields (marked with *).', true);
+    return;
+  }
+
+  const checkedSections = Array.from(document.querySelectorAll('.section-check:checked'))
+    .map(cb => parseInt(cb.value));
+
+  if (checkedSections.length === 0) {
+    setStatus('Please select at least one section to generate.', true);
+    return;
+  }
+
+  lastFeatureName = featureName;
+  fullOutput = '';
+  sectionResults = {};
+
+  const btn = document.getElementById('generateBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Generating…';
+  btn.classList.remove('done');
+
+  // Split checked sections into pairs
+  const batches = [];
+  for (let i = 0; i < checkedSections.length; i += 2) {
+    batches.push(checkedSections.slice(i, i + 2));
+  }
+
+  // Pre-render placeholder cards
+  initCards(checkedSections);
+  document.getElementById('results').classList.add('show');
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  showProgress(5);
+
+  try {
+    for (let b = 0; b < batches.length; b++) {
+      const batch = batches[b];
+      const names = batch.map(s => SECTION_DEFS[s - 1].title).join(' & ');
+      setStatus(`Generating ${names}… (batch ${b + 1} of ${batches.length})`);
+      showProgress(Math.round(5 + (b / batches.length) * 85));
+
+      const res = await fetch('/.netlify/functions/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ featureName, brief, launchStage, persona, notes, sections: batch })
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Server error');
+
+      const parsed = parseBatchResult(data.result, batch);
+      batch.forEach(sectionNum => {
+        const content = parsed[sectionNum] || '';
+        sectionResults[sectionNum] = content;
+        updateCard(sectionNum, content);
+      });
+    }
+
+    // Build full output for copy/download
+    fullOutput = Object.keys(sectionResults)
+      .sort((a, b) => a - b)
+      .map(k => `## ${SECTION_DEFS[k - 1].title}\n\n${sectionResults[k]}`)
+      .join('\n\n---\n\n');
+
+    showProgress(100);
+    btn.disabled = false;
+    btn.classList.add('done');
+    btn.textContent = 'Generated ✓';
+    setStatus('Done. Copy individual sections or use "Copy all" above.');
+
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = 'Generate Message Pack';
+    document.getElementById('progressWrap').classList.remove('visible');
+    setStatus('Error: ' + (err.message || 'Something went wrong. Please try again.'), true);
+  }
+}
+
+// ── CARD RENDERING ──
+function initCards(sections) {
+  const cards = document.getElementById('cards');
+  cards.innerHTML = sections.map(i => {
+    const def = SECTION_DEFS[i - 1];
+    return `<div class="card card-s${i}" id="card-${i}">
+      <div class="card-h">
+        <h3>${def.title}</h3>
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <span class="card-tag">${def.tag}</span>
+          <button class="copy-btn" id="copy-btn-${i}" data-copy="" onclick="copySection(this)" disabled>Copy</button>
+        </div>
+      </div>
+      <div class="card-body" id="card-body-${i}">
+        <p style="color:var(--color-text-faint)"><span class="spinner-muted"></span>Generating…</p>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function updateCard(sectionNum, content) {
+  const body = document.getElementById(`card-body-${sectionNum}`);
+  const copyBtn = document.getElementById(`copy-btn-${sectionNum}`);
+  if (body) body.innerHTML = parseMarkdown(content);
+  if (copyBtn) {
+    copyBtn.dataset.copy = encodeURIComponent(content);
+    copyBtn.disabled = false;
+  }
+}
+
+function parseBatchResult(text, sections) {
+  const result = {};
+  const parts = text.split(/(?=^## \d)/m);
+  parts.forEach(part => {
+    const match = part.match(/^## (\d)/);
+    if (match) {
+      const num = parseInt(match[1]);
+      if (sections.includes(num)) {
+        result[num] = part.replace(/^## .+\n?/, '').trim();
+      }
+    }
+  });
+  // Fallback: if only one section requested and model didn't add heading
+  if (sections.length === 1 && Object.keys(result).length === 0) {
+    result[sections[0]] = text.trim();
+  }
+  return result;
+}
+
+// ── MARKDOWN PARSER ──
+function parseMarkdown(text) {
+  if (!text) return '<p style="color:var(--color-text-faint)">No content generated for this section.</p>';
+  return text
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^#### (.+)$/gm, '<h4>$1</h4>')
+    .replace(/^---$/gm, '<hr>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/(?:^|\n)((?:\d+\. .+\n?)+)/g, (m, list) =>
+      '<ol>' + list.trim().split('\n').map(l => `<li>${l.replace(/^\d+\. /, '')}</li>`).join('') + '</ol>')
+    .replace(/(?:^|\n)((?:[-*] .+\n?)+)/g, (m, list) =>
+      '<ul>' + list.trim().split('\n').map(l => `<li>${l.replace(/^[-*] /, '')}</li>`).join('') + '</ul>')
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/\n/g, '<br>');
+}
+
+// ── COPY ──
+function copySection(btn) {
+  navigator.clipboard.writeText(decodeURIComponent(btn.dataset.copy)).then(() => {
+    btn.classList.add('copied');
+    btn.textContent = 'Copied ✓';
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = 'Copy'; }, 1500);
+  });
+}
+
+function copyAll() {
+  if (!fullOutput) return;
+  navigator.clipboard.writeText(fullOutput).then(() => {
+    const btn = document.getElementById('copyAllBtn');
+    btn.classList.add('copied');
+    btn.textContent = 'Copied all ✓';
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = 'Copy all outputs'; }, 1500);
+  });
+}
+
+function downloadMd() {
+  if (!fullOutput) return;
+  const blob = new Blob([fullOutput], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (lastFeatureName.replace(/\s+/g, '_') || 'launch_pack') + '_message_pack.md';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── HELPERS ──
+function setStatus(msg, isError) {
+  const el = document.getElementById('status');
+  el.textContent = msg;
+  el.className = 'status' + (isError ? ' error' : '');
+}
+function showProgress(pct) {
+  document.getElementById('progressWrap').classList.add('visible');
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+</script>
+</body>
+</html>
